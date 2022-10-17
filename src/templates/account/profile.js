@@ -106,7 +106,7 @@ export default function Profile(){
         <Button variant="link" href="/">
             <img src={logo} alt='logo' />
         </Button>
-        <Card className = 'card'>
+        <Card>
         <Row style={{'width':'500px','height':'150px','position':'relative'}}>
             <Col><Card.Img style={{'width':'150px','height':'150px'}}variant="top" src={avt} alt='bàkhasfkj'/> </Col>
             <Col id='fullname'>{info.fullname}</Col>
@@ -130,7 +130,7 @@ export default function Profile(){
         </ListGroup>
         <Card.Body>
             <Tabs
-                defaultActiveKey="product"
+                defaultActiveKey="work"
                 id="uncontrolled-tab-example"
                 className="mb-3"
                 >
@@ -160,10 +160,17 @@ export default function Profile(){
                                 <TableCell align="left">{row.hash}</TableCell>
                                 <TableCell align="left">{row.methods}</TableCell>
                                 <TableCell align="left">{row.timestamp}</TableCell>
-                                <TableCell align="left" ><Button variant="link" onClick={()=>{history.push('/user-profile/'+row.fromusr)}}>{row.fromusr}</Button></TableCell>
+                                <TableCell align="left" >
+                                {row.methods =="add_book"
+                                ?<Button variant="link" onClick={()=>{history.push('/book/profile/'+row.fromusr)}}>{row.fromusr}</Button>
+                                :<Button variant="link" onClick={()=>{history.push('/user-profile/'+row.fromusr)}}>{row.fromusr}</Button>
+                                }
+                                </TableCell>
                                 <TableCell align="left">{row.value}</TableCell>
                                 <TableCell align="left">
-                                <Button variant="link" onClick={()=>{history.push('/user-profile/'+row.to)}}>{row.to}</Button></TableCell>
+                                {console.log(row.methods === "add_book")}
+                                <Button variant="link" onClick={()=>{history.push('/user-profile/'+row.to)}}>{row.to}</Button>
+                                </TableCell>
                                 </TableRow>
                             ))}
                             </TableBody>

@@ -9,7 +9,7 @@ import Register from './templates/account/register';
 import Logout from './templates/account/logout';
 import Profile from './templates/account/profile';
 import UserProfile from './templates/account/userprofile';
-
+import Home from './templates/index2';
 //book
 import BProfile from './templates/book/profile';
 
@@ -26,13 +26,13 @@ function App() {
           <Route path="/profile/:value" children={<Profile />}></Route>
           <Route path="/user-profile/:username" children={<UserProfile />}></Route>
           <Route path="/book/add-book"><AddBook /></Route>
-          <Route path="/book/profile/:address" children={<BProfile />}></Route>
+          <Route path="/book/profile/:idBook" children={<BProfile />}></Route>
+          <Route path='/'><Home /></Route>
 
-
-
+{/* 
         <Route path="/">
           <Index />
-        </Route>
+        </Route> */}
         
       </Switch>
     </Router>
