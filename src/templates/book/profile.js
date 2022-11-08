@@ -75,10 +75,6 @@ export default function BProfile(){
         };
         getInfoBook();
     },[]);
-    let tempid = '1665422479'
-    const gotoProfileBook =()=>{
-        history.push('/book/profile/'+tempid)
-    }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -96,7 +92,7 @@ export default function BProfile(){
                 <div className='header'>
                 <Nav className="justify-content-end" activeKey="/home">
                         <Nav.Item className='nav-1'>
-                        <Nav.Link onClick={gotoProfileBook}>{t('header.market')}</Nav.Link>
+                        <Nav.Link >{t('header.market')}</Nav.Link>
                         </Nav.Item>
                         <Nav.Item className='nav-1'>
                         <Nav.Link onClick={goProfile}>{t('header.profile')}</Nav.Link>

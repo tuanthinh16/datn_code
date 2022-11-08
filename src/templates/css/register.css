@@ -36,6 +36,8 @@
 .bg-glass {
   background-color: hsla(0, 0%, 100%, 0.9) !important;
   backdrop-filter: saturate(200%) blur(25px);
+  background-repeat: no-repeat;
+  height: 1200px;
 }
 #imgreg{
   height: 10rem;

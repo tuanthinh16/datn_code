@@ -62,7 +62,7 @@ export default function Register(){
 
       <MDBRow>
 
-        <MDBCol md='6' className='text-center text-md-start d-flex flex-column justify-content-center'>
+        <MDBCol md='5' className='text-center text-md-start d-flex flex-column justify-content-center'>
             <div className="text-center">
                 <img src={logo} alt="logo" id='imgreg'onClick={()=>history.push('/')}/>
             </div>
@@ -78,7 +78,7 @@ export default function Register(){
           <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
           <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
 
-          <MDBCard className='my-5 bg-glass'>
+          <MDBCard className='my-5-bg-glass'>
             <MDBCardBody className='p-5'>
 
               <MDBRow>
@@ -93,10 +93,6 @@ export default function Register(){
 
               <MDBInput wrapperClass='mb-4' label='Email' id='form3' type='email'onChange={onValueChange_Email}/>
               <MDBInput wrapperClass='mb-4' label='Password' id='form4' type='password'onChange={onValueChange_Password}/>
-
-              <div className='d-flex justify-content-center mb-4'>
-                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
-              </div>
 
               <MDBBtn className='w-100 mb-4' size='md' onClick={onCreate}>sign up</MDBBtn>
             </MDBCardBody>
