@@ -111,7 +111,7 @@ function Home() {
                         <Card.Text >{" Country:"}{t(row.country)}</Card.Text>
                         <Card.Text>{"SL: "}{row.amount} {"Pirce: "}{row.price}{" VND"}</Card.Text>
                         <Card.Text>{"User: "}{row.username}</Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
+                        <Button variant="primary">Detail</Button>
                     </Card.Body>
                     </Card>
                 ))}

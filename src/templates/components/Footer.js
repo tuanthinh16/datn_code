@@ -1,26 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Trans,useTranslation,Translation  } from 'react-i18next';
 
 export const Footer = () => {
+  const { t } = useTranslation();
   return (
     <Wrapper>
       <div className='container-footer'>
         <div className='f1'>
-          <h1>About Us</h1>
+          <h1>{t('Footer.about')}</h1>
           <hr/>
-          <p>diễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùngdiễn đàn chúng tôi mang lại một sự trải nghiệm mới mẻ cho người dùng</p>
+          <p>{t('Footer.about-content')}</p>
         </div>
         <div className='f2'>
-          <h1>Contact</h1>
+          <h1>{t('Footer.contact')}</h1>
           <hr/>
           <p>Email: tuanthinhdz@gmail.com</p>
           <p>Phone: 0335833737</p>
           <p>Address: 566 Núi Thành,Hòa Cường Nam, Hải Châu, Đà Nẵng</p>
         </div>
         <div className='f3'>
-          <h1>Help</h1>
+          <h1>{t('Footer.help')}</h1>
           <hr/>
-          <p> Mọi vấn đề thắc mắc và góp ý hãy liên hệ với chung tôi tại <a href='#'>Trung tâm trợ giúp</a></p>
+          <p>{t('Footer.help-content')}<a href='#'>{t('Footer.help-center')}</a></p>
         </div>
       </div>
     </Wrapper>

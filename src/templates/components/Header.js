@@ -24,17 +24,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CssBaseline from '@mui/material/CssBaseline';
 import styled from '@emotion/styled';
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
-const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-  });
-  
-const customContentStyle = {
-    width: '500px',
-    maxWidth: 'none',
-  };
+
 const getBookAPI =()=>{
     return getAPI('/book/get-book-sell')
 }

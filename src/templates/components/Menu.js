@@ -98,7 +98,7 @@ export const Menu = () => {
                     <NavDropdown.Item onClick={()=>i18n.changeLanguage('en')}>{t('menu.lan-en')}</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/book/add-book">{t('menu.create')}</Nav.Link>
-            <Nav.Link href="#">{t('menu.sell')}</Nav.Link>
+            {/* <Nav.Link href="#">{t('menu.sell')}</Nav.Link> */}
             <Nav.Link href="#">{t('menu.give')}</Nav.Link>
 
             {/* type */}
