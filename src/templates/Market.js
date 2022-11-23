@@ -22,6 +22,10 @@ const getBookAPI = () => {
 const getInfoBookSell = (id) => {
   return postAPI("/book/get-booksell-by-id/" + id);
 };
+const onBuy = async (value) => {
+  try {
+  } catch (error) {}
+};
 function Home() {
   const [open, setOpen] = React.useState(false);
 
@@ -67,6 +71,7 @@ function Home() {
         const rs = await getBookAPI();
         if (rs.status === 200) {
           setInfoBook(rs["data"]);
+          console.log(rs["data"]);
         }
       } catch (error) {}
     };
@@ -85,7 +90,7 @@ function Home() {
                 <Card.Title>
                   {" "}
                   <Link
-                    onClick={() => history.push("/book/profile/" + row._id)}
+                    onClick={() => history.push("/book/profile/" + row.bookid)}
                   >
                     {row.name}
                   </Link>
@@ -187,7 +192,7 @@ export const Detailbook = () => {
             {infoBook.amount}
           </h3>
           <ButtonGroup>
-            <Button>
+            <Button onClick={()=>onBuy(id)}>
               {"GET WITH"}{" "}
               {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
               {"$"}

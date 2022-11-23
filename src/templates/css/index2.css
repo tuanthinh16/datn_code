@@ -29,14 +29,11 @@
     /* background-position: center; */
     /* background-repeat: inherit; */
     /* background-size: cover; */
-    min-height: 1200px;
+    min-height: 800px;
     display: flex;
 }
 .anh{
     opacity: 0.2;
-}
-*{
-    font-size: x-large;
 }
 .d-flex{
     max-width: 40rem;
@@ -49,7 +46,6 @@
 }
 .menucontent{
     font-weight: bold;
-    font-size: xx-large;
     /* background-color: rgba(216, 213, 210, 0.781); */
 }
 .menucontent a{

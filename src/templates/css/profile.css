@@ -60,6 +60,7 @@ TableCell{
 div .contentBook{
     /* background-color: aqua; */
     position: absolute;
+    margin-left: 3rem;
 }
 div .contentBook .imageBook{
     height: 300px;

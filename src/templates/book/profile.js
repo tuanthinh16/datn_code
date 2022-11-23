@@ -1,25 +1,12 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import Spinner from "react-bootstrap/Spinner";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { Trans, useTranslation, Translation } from "react-i18next";
-import i18n from "../../translation/i18n";
-import Toast from "react-bootstrap/Toast";
+
+import { useTranslation } from "react-i18next";
 import { createBrowserHistory } from "history";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Login from "../account/login";
-import logo from "../images/logo.png";
-import { BsFillPeopleFill } from "react-icons/bs";
+
 import Alert from "react-bootstrap/Alert";
 import useClipboard from "react-hook-clipboard";
 import { getAPI } from "../service/api";
@@ -120,14 +107,6 @@ export default function BProfile() {
 
                 <Alert.Heading>Type: {t(infoBook.Type)}</Alert.Heading>
                 <p className="mb-0">Amount {infoBook.Soluong} </p>
-              </Alert>
-              <Alert variant="success">
-                <p>
-                  Detail: Aww yeah, you successfully read this important alert
-                  message. This example text is going to run a bit longer so
-                  that you can see how spacing within an alert works with this
-                  kind of content.
-                </p>
               </Alert>
             </Col>
           </Row>
