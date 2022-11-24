@@ -119,7 +119,7 @@ export default function Profile() {
       try {
         const rsID = await getlistID(username);
         if (rsID.status === 200) {
-          // console.log(rsID['data'])
+          console.log(rsID["data"]);
           setBook(rsID["data"]);
         }
       } catch (error) {}

@@ -34,6 +34,7 @@ const postnew = [
             Văn bản do Viện trưởng Nguyễn Đăng Điệp ký cho biết, ngày 21/1 và 21/2/2022, Viện nhận được đơn đề nghị “về việc giải quyết vi phạm bản quyền trong nghiên cứu khoa học” của TS Đỗ Hải Ninh liên quan đến đề tài khoa học “Tự truyện và tiểu thuyết Việt Nam đương đại sau 1986 nhìn từ phê bình phân tâm học” do TS Vũ Thị Trang chủ nhiệm, thực hiện trong thời gian từ 2017 đến 2019.",
     image:
       "https://cdn.baogiaothong.vn/upload/images/2022-4/article_img/2022-11-10/img-bgt-2021-9-1668068467-width700height1069.jpg",
+    link: "https://www.baogiaothong.vn/sach-dat-giai-cua-hoi-nha-van-bi-to-dao-van-vien-van-hoc-len-tieng-d572280.html",
   },
   {
     id: 1,
@@ -43,6 +44,7 @@ const postnew = [
       Nhà văn Lê Lựu đã ra đi mãi mãi ở tuổi 81 vào ngày 9/11. Gần 60 năm miệt mài với nghiệp viết, Lê Lựu đã đóng góp cho nền văn chương nước nhà 15 tác phẩm - con số không nhiều, nhưng những trang văn của ông lại gắn liền với sự thay đổi của thời đại.",
     image:
       "https://cdn.baogiaothong.vn/upload/images/2022-4/article_img/2022-11-10/img-bgt-2021-le-lu-u1-1668050902-width1024height827.jpeg",
+    link: "https://www.baogiaothong.vn/nha-van-le-luu-mot-thoi-xa-vang-khon-kho-da-vinh-vien-troi-di-d572252.html",
   },
   {
     id: 2,
@@ -53,6 +55,7 @@ const postnew = [
       Theo nhà thơ Nguyễn Quang Thiều, Chủ tịch Hội Nhà văn Việt Nam, việc chọn ra một tác phẩm khiến những người trong giới ở trong nước đều phải “ngả mũ” đã khó, nên dự giải Nobel là chưa đủ sức. Tuy nhiên, điều đó không khiến chúng ta bi quan.",
     image:
       "https://cdn.baogiaothong.vn/upload/images/2022-3/article_img/2022-09-02/img-bgt-2021-hoi-nghi-1662110297-width1280height758.jpeg",
+    link: "https://www.baogiaothong.vn/vi-sao-van-hoc-viet-chua-du-suc-du-giai-nobel-d564547.html",
   },
 ];
 const getAllbooks = () => {
@@ -255,8 +258,9 @@ export const Index = () => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small">Share</Button>
-                      <Button size="small">Learn More</Button>
+                      <Link target="_blank" href={row.link}>
+                        View More
+                      </Link>
                     </CardActions>
                   </Card>
                 ))}
@@ -322,20 +326,52 @@ export const Wrapper = styled.div`
 const getInfoBookSell = (id) => {
   return postAPI("/get-booksell-bookid/" + id);
 };
+const onBuyAPI = (id) => {
+  return postAPI("/book/buy/" + id);
+};
 const valueConvert = 24345;
+
 export const InfoBuy = () => {
+  let username = "";
+  const token = localStorage.getItem("token");
+  function parseJwt(token) {
+    if (!token) {
+      return;
+    }
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    return JSON.parse(window.atob(base64));
+  }
+  if (token != null) {
+    username = parseJwt(token)["sub"];
+  } else {
+    username = "";
+    console.error("Invalid token: " + token);
+  }
   let id = localStorage.getItem("selectedBookId");
   const [infoBook, setInfoBook] = React.useState([]);
+  const history = createBrowserHistory({
+    forceRefresh: true,
+  });
+  const getInfoBook = async () => {
+    try {
+      const rs = await getInfoBookSell(id);
+      if (rs.status === 200) {
+        setInfoBook(rs["data"]);
+        console.log(rs.data);
+      }
+    } catch (error) {}
+  };
+  const onBuy = (id) => {
+    try {
+      const rs = onBuyAPI(id);
+      if (rs.status === 200) {
+        console.log(rs.data);
+        history.push("/profile/" + username);
+      }
+    } catch (error) {}
+  };
   React.useEffect(() => {
-    const getInfoBook = async () => {
-      try {
-        const rs = await getInfoBookSell(id);
-        if (rs.status === 200) {
-          setInfoBook(rs["data"]);
-          console.log(rs.data);
-        }
-      } catch (error) {}
-    };
     getInfoBook();
   }, []);
   return (
@@ -349,10 +385,19 @@ export const InfoBuy = () => {
             {"Availd: "}
             {infoBook.amount}
           </h3>
-          <Button>
-            {"GET WITH"} {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
-            {"$"}
-          </Button>
+          {infoBook.username == username ? (
+            <Button>
+              {"YOU SELL"}{" "}
+              {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
+              {"$"}
+            </Button>
+          ) : (
+            <Button onClick={() => onBuy(infoBook._id)}>
+              {"GET WITH"}{" "}
+              {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
+              {"$"}
+            </Button>
+          )}
         </div>
       </div>
     </Wrapper>

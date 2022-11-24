@@ -17,6 +17,7 @@ import { Wallet } from "./templates/wallet/wallet";
 import AddBook from "./templates/book/addbook";
 import SellForm from "./templates/book/sellForm";
 import { CountryFillter } from "./templates/book/CountryFillter";
+import Search from "./templates/book/Search";
 function App() {
   return (
     <SnackbarProvider>
@@ -48,6 +49,7 @@ function App() {
           </Route>
           <Route path="/wallet/:username" children={<Wallet />}></Route>
           <Route path="/book/type/:value" children={<TypeFillter />}></Route>
+          <Route path="/search/:value" children={<Search />}></Route>
           <Route
             path="/book/country/:country"
             children={<CountryFillter />}

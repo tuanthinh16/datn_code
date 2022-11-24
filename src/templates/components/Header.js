@@ -1,13 +1,10 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../css/index2.css";
 import logo from "../images/logo.png";
 import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { Trans, useTranslation, Translation } from "react-i18next";
-import i18n from "../../translation/i18n";
+import { useTranslation } from "react-i18next";
 import Toast from "react-bootstrap/Toast";
 import { createBrowserHistory } from "history";
 import { BsFillPeopleFill } from "react-icons/bs";
@@ -15,15 +12,8 @@ import Spinner from "react-bootstrap/Spinner";
 import Login from "../account/login";
 import Dialog from "@mui/material/Dialog";
 import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import { getAPI, postAPI } from "../service/api";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
-import CssBaseline from "@mui/material/CssBaseline";
 import styled from "@emotion/styled";
+import { postAPI } from "../service/api";
 
 export const Header = () => {
   const [open, setOpen] = React.useState(false);
@@ -64,6 +54,13 @@ export const Header = () => {
   const goProfile = () => {
     history.push("/profile/" + username);
   };
+  const [values, setValues] = useState("");
+  const onValueChange = (e) => {
+    setValues(e.target.value);
+  };
+  const onSearch = (values) => {
+    history.push("/search/" + values);
+  };
   return (
     <Wrapper>
       <div className="header">
@@ -98,10 +95,16 @@ export const Header = () => {
               <Form.Control
                 type="search"
                 placeholder=".........."
+                onChange={onValueChange}
                 className="me-2"
                 aria-label="Search"
               />
-              <Button variant="outline-success">{t("header.search")}</Button>
+              <Button
+                variant="outline-success"
+                onClick={() => onSearch(values)}
+              >
+                {t("header.search")}
+              </Button>
             </Form>
           </Nav.Item>
           {/* account */}

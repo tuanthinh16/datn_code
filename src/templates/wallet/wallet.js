@@ -24,10 +24,13 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import { Trans, useTranslation, Translation } from "react-i18next";
+import { useSnackbar } from "notistack";
+import IosShareIcon from "@mui/icons-material/IosShare";
 
 import avt from "../images/avt.jpg";
 import qr from "../images/qr.png";
 import { getAPI, postAPI } from "../service/api";
+import { FormControl } from "@mui/material";
 
 const getInfo = (username) => {
   return postAPI("/wallet/" + username);
@@ -35,11 +38,29 @@ const getInfo = (username) => {
 const getWork = (username) => {
   return postAPI("/wallet/transfer/" + username);
 };
+
 export const Wallet = () => {
   const [openwithdraww, setOpenWidthdraww] = React.useState(false);
   const [opendes, setOpenDes] = React.useState(false);
   const [opensend, setOpenSend] = React.useState(false);
-
+  const getInfoUser = async () => {
+    try {
+      const rs = await getInfo(username);
+      if (rs.status === 200) {
+        console.log(rs.data);
+        setInfo(rs.data);
+      }
+    } catch (error) {}
+  };
+  const getWorkUsr = async () => {
+    try {
+      const result = await getWork(username);
+      if (result.status === 200) {
+        setWork(result.data["data"]);
+        console.log(result.data["data"]);
+      }
+    } catch (error) {}
+  };
   const handleClickOpenWithdraww = () => {
     setOpenWidthdraww(true);
   };
@@ -53,6 +74,8 @@ export const Wallet = () => {
     setOpenWidthdraww(false);
     setOpenDes(false);
     setOpenSend(false);
+    getInfoUser();
+    getWorkUsr();
   };
   const [info, setInfo] = React.useState([]);
   const [work, setWork] = React.useState([]);
@@ -73,25 +96,8 @@ export const Wallet = () => {
     console.error("Invalid token: " + token);
   }
   React.useEffect(() => {
-    const getInfoUser = async () => {
-      try {
-        const rs = await getInfo(username);
-        if (rs.status === 200) {
-          console.log(rs.data);
-          setInfo(rs.data);
-        }
-      } catch (error) {}
-    };
     getInfoUser();
-    const getWorkUsr = async () => {
-      try {
-        const result = await getWork(username);
-        if (result.status === 200) {
-          setWork(result.data["data"]);
-          console.log(result.data["data"]);
-        }
-      } catch (error) {}
-    };
+
     getWorkUsr();
   }, []);
   return (
@@ -192,6 +198,50 @@ export const Wallet = () => {
                         >
                           {row.methods}
                         </TableCell>
+                      ) : row.methods == "withdraw" ? (
+                        <TableCell
+                          align="right"
+                          style={{
+                            backgroundColor: "#0dcaf0",
+                            color: "white",
+                            "font-weight": "bold",
+                          }}
+                        >
+                          {row.methods}
+                        </TableCell>
+                      ) : row.methods == "buy" ? (
+                        <TableCell
+                          align="right"
+                          style={{
+                            backgroundColor: "#198754",
+                            color: "white",
+                            "font-weight": "bold",
+                          }}
+                        >
+                          {row.methods}
+                        </TableCell>
+                      ) : row.methods == "send" ? (
+                        <TableCell
+                          align="right"
+                          style={{
+                            backgroundColor: "#f4a15b",
+                            color: "white",
+                            "font-weight": "bold",
+                          }}
+                        >
+                          {row.methods}
+                        </TableCell>
+                      ) : row.methods == "recived" ? (
+                        <TableCell
+                          align="right"
+                          style={{
+                            backgroundColor: "#955a4c",
+                            color: "white",
+                            "font-weight": "bold",
+                          }}
+                        >
+                          {row.methods}
+                        </TableCell>
                       ) : (
                         <TableCell
                           align="right"
@@ -249,6 +299,15 @@ export const Wrapper = styled.div`
     }
     .transfer-history {
       display: flex;
+    }
+  }
+  .container-send {
+    padding: 10px;
+    .MuiTextField-root {
+      margin-left: 10px;
+    }
+    .MuiOutlinedInput-root {
+      margin-left: 10px;
     }
   }
 `;
@@ -322,6 +381,10 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
+const depositAPI = (data) => {
+  return postAPI("/wallet/deposit", data);
+};
+
 const valueConvert = 24345;
 export const Deposit = () => {
   const [value, setValue] = React.useState(0);
@@ -330,7 +393,18 @@ export const Deposit = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const { enqueueSnackbar } = useSnackbar();
+  const _onBuy = async () => {
+    try {
+      const fdata = new FormData();
+      fdata.append("value", amount);
+      fdata.append("email", detail.nd);
+      const rs = await depositAPI(fdata);
+      if (rs.status === 200) {
+        enqueueSnackbar("Sucessfully", { variant: "success" });
+      }
+    } catch (error) {}
+  };
   const curency = [
     { usd: 5 },
     { usd: 10 },
@@ -338,7 +412,7 @@ export const Deposit = () => {
     { usd: 50 },
     { usd: 100 },
   ];
-  const onBuy = (am) => {
+  const onSelected = (am) => {
     setAmount(am);
   };
   const onChangeDetail = (e) => {
@@ -363,7 +437,7 @@ export const Deposit = () => {
           <p>Select Amount</p>
           <ButtonGroup variant="text" aria-label="text button group">
             {curency.map((row) => (
-              <Button onClick={() => onBuy(row.usd)}>
+              <Button onClick={() => onSelected(row.usd)}>
                 {row.usd}
                 {"$ = "}
                 {row.usd * valueConvert}
@@ -390,6 +464,7 @@ export const Deposit = () => {
             variant="contained"
             color="success"
             style={{ float: "right", marginTop: "10px" }}
+            onClick={_onBuy}
           >
             Create
           </Button>
@@ -437,6 +512,107 @@ export const Deposit = () => {
     </Wrapper>
   );
 };
+
+const onSendAPI = (data) => {
+  return postAPI("/wallet/send", data);
+};
 export const Send = () => {
-  return <Wrapper>Send</Wrapper>;
+  const [values, setValues] = React.useState({ amount: "", address: "" });
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+  const [info, setInfo] = React.useState([]);
+  console.log(values.amount + "aaaa: " + values.address);
+  const token = localStorage.getItem("token");
+  const getInfoUser = async () => {
+    try {
+      const rs = await getInfo(username);
+      if (rs.status === 200) {
+        console.log(rs.data);
+        setInfo(rs.data);
+      }
+    } catch (error) {}
+  };
+  let username = "";
+  function parseJwt(token) {
+    if (!token) {
+      return;
+    }
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    return JSON.parse(window.atob(base64));
+  }
+  if (token != null) {
+    username = parseJwt(token)["sub"];
+  } else {
+    console.error("Invalid token: " + token);
+  }
+  React.useEffect(() => {
+    getInfoUser();
+  }, []);
+  const { enqueueSnackbar } = useSnackbar();
+  const onSend = () => {
+    try {
+      const data = new FormData();
+      data.append("amount", values.amount);
+      data.append("address", values.address);
+      const rs = onSendAPI(data);
+
+      enqueueSnackbar("Sucessfully", { variant: "success" });
+    } catch (error) {}
+  };
+  return (
+    <Wrapper>
+      <h2 style={{ color: "red", "text-align": "center" }}>
+        Give Your Money To Other User
+      </h2>
+      <div className="container-send" style={{ display: "flex" }}>
+        <FormControl>
+          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+
+          {info.balance >= values.amount ? (
+            <OutlinedInput
+              id="outlined-adornment-amount"
+              value={values.amount}
+              onChange={handleChange("amount")}
+              startAdornment={
+                <InputAdornment position="start">$</InputAdornment>
+              }
+              label="Amount"
+            />
+          ) : (
+            <OutlinedInput
+              error
+              id="outlined-adornment-amount"
+              value={values.amount}
+              helperText="please enter smaller amount"
+              onChange={handleChange("amount")}
+              startAdornment={
+                <InputAdornment position="start">$</InputAdornment>
+              }
+              label="Amount"
+            />
+          )}
+        </FormControl>
+        <TextField
+          sx={{ width: "50ch" }}
+          onChange={handleChange("address")}
+          label="Enter wallet address to send"
+          id="fullWidth"
+        />
+        <Button variant="primary" onClick={onSend}>
+          <IosShareIcon />
+        </Button>
+      </div>
+      <center>
+        {info.balance >= values.amount ? (
+          ""
+        ) : (
+          <small>
+            Plase enter smaller amount. Your amount: {info.balance} $
+          </small>
+        )}
+      </center>
+    </Wrapper>
+  );
 };

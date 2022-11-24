@@ -22,8 +22,15 @@ const getBookAPI = () => {
 const getInfoBookSell = (id) => {
   return postAPI("/book/get-booksell-by-id/" + id);
 };
+const onBuyAPI = (id) => {
+  return postAPI("/book/buy/" + id);
+};
 const onBuy = async (value) => {
   try {
+    const rs = await onBuyAPI(value);
+    if (rs.status === 200) {
+      console.log(rs.data);
+    }
   } catch (error) {}
 };
 function Home() {
@@ -192,7 +199,7 @@ export const Detailbook = () => {
             {infoBook.amount}
           </h3>
           <ButtonGroup>
-            <Button onClick={()=>onBuy(id)}>
+            <Button onClick={() => onBuy(infoBook._id)}>
               {"GET WITH"}{" "}
               {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
               {"$"}
