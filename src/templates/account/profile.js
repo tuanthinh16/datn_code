@@ -26,7 +26,8 @@ import SellForm from "../book/sellForm";
 import Dialog from "@mui/material/Dialog";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
-
+import { TextField } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 const getWork = (username) => {
   return getAPI("/profile/get-work/" + username);
 };
@@ -46,6 +47,9 @@ const getlistID = (username) => {
 const sellAPI = (id) => {
   return postAPI("/book/sell-book/" + id);
 };
+const onEditAPI =(data)=>{
+  return postAPI("/account/edit" ,data);
+}
 export default function Profile() {
   const [clipboard, copyToClipboard] = useClipboard();
   const toClipboard = "I want to go to the clipboard";
@@ -81,6 +85,25 @@ export default function Profile() {
   }
   const { t } = useTranslation();
   // get data
+  const getInfo = async () => {
+    try {
+      const rs = await getInfoAPI(username);
+      if (rs.status === 200) {
+        // console.log(rs);
+        setInfo({
+          addressWallet: rs["data"]["address-wallet"],
+          balance: rs["data"]["balance"],
+          address: rs["data"]["data"]["Address"],
+          email: rs["data"]["data"]["Email"],
+          fullname: rs["data"]["data"]["FullName"],
+          phone: rs["data"]["data"]["Phone"],
+          Timecreated: rs["data"]["data"]["TimeCreated"],
+        });
+      }
+    } catch (e) {
+      console.log("error: ", e);
+    }
+  };
   useEffect(() => {
     const requestData = async () => {
       try {
@@ -95,25 +118,7 @@ export default function Profile() {
       }
     };
     requestData();
-    const getInfo = async () => {
-      try {
-        const rs = await getInfoAPI(username);
-        if (rs.status === 200) {
-          // console.log(rs);
-          setInfo({
-            addressWallet: rs["data"]["address-wallet"],
-            balance: rs["data"]["balance"],
-            address: rs["data"]["data"]["Address"],
-            email: rs["data"]["data"]["Email"],
-            fullname: rs["data"]["data"]["FullName"],
-            phone: rs["data"]["data"]["Phone"],
-            Timecreated: rs["data"]["data"]["TimeCreated"],
-          });
-        }
-      } catch (e) {
-        console.log("error: ", e);
-      }
-    };
+    
     getInfo();
     const getBook = async () => {
       try {
@@ -152,6 +157,24 @@ export default function Profile() {
   const handleClose = () => {
     setOpen(false);
   };
+  //onedit
+  const [isedit,setIsedit] = React.useState(false);
+  const [values,setValues] = React.useState({address:'',phone:'',email:''})
+  const onValueChange =(prop)=>(e)=>{
+    setValues({ ...values, [prop]: e.target.value });
+  }
+  const onEdit = async()=>{
+    const data = new FormData();
+    data.append('phone',values.phone);
+    data.append('dc',values.address);
+    data.append('email',values.email);
+    const rs = await onEditAPI(data);
+    if(rs.status === 200){
+      enqueueSnackbar("Sucessfully", { variant: "success" });
+      getInfo();
+      setIsedit(false)
+    }
+  }
   return (
     <Container style={{ "margin-left": "0" }}>
       <Header />
@@ -197,12 +220,69 @@ export default function Profile() {
             A member is excellence on forum with a lot of post high quality
             about some book and give some suggestions for newbie.
           </Card.Text>
+          <Button variant="outlined" style={{position:'absolute',right:'0px'}} onClick={()=> setIsedit(true)}><EditIcon/></Button>
+          <br/>
         </Card.Body>
         <ListGroup className="list-group-flush">
-          <ListGroup.Item>Email: {info.email}</ListGroup.Item>
-          <ListGroup.Item>Address: {info.address}</ListGroup.Item>
-          <ListGroup.Item>Phone Number: {info.phone}</ListGroup.Item>
+          <ListGroup.Item>Email: {' '}
+          {isedit ?(
+            <TextField 
+            id="standard-helperText"
+            variant="standard"
+            onChange={onValueChange('email')}
+            />
+          )
+          :(
+            <TextField 
+            id="standard"
+            value={info.email}
+            variant="standard"
+            disabled
+            />
+          )
+          }
+          </ListGroup.Item>
+          <ListGroup.Item>Address:  {' '}
+          {isedit ?(
+            <TextField 
+            id="standard-helperText"
+            variant="standard"
+            onChange={onValueChange('address')}
+            />
+          )
+          :(
+            <TextField 
+            id="standard-helperText"
+            value={info.address}
+            variant="standard"
+            disabled
+            />
+          )
+          }
+          </ListGroup.Item>
+          <ListGroup.Item>Phone Number: {' '}
+          {isedit ?(
+            <TextField 
+            id="standard-helperText"
+            variant="standard"
+            onChange={onValueChange('phone')}
+            />
+          )
+          :(
+            <TextField 
+            id="standard-helperText"
+            value={info.phone}
+            variant="standard"
+            disabled
+            />
+          )
+          }
+          </ListGroup.Item>
           <ListGroup.Item>Time Created: {info.Timecreated}</ListGroup.Item>
+          {isedit?(
+            <Button onClick={onEdit}>Update</Button>
+          )
+          :''}
         </ListGroup>
         <Card.Body>
           <Tabs

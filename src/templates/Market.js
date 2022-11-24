@@ -15,6 +15,7 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import { ButtonGroup } from "@mui/material";
+import { useSnackbar } from "notistack";
 
 const getBookAPI = () => {
   return getAPI("/book/get-book-sell");
@@ -25,14 +26,7 @@ const getInfoBookSell = (id) => {
 const onBuyAPI = (id) => {
   return postAPI("/book/buy/" + id);
 };
-const onBuy = async (value) => {
-  try {
-    const rs = await onBuyAPI(value);
-    if (rs.status === 200) {
-      console.log(rs.data);
-    }
-  } catch (error) {}
-};
+
 function Home() {
   const [open, setOpen] = React.useState(false);
 
@@ -174,8 +168,42 @@ export const Wrapper = styled.div`
 `;
 const valueConvert = 24345;
 export const Detailbook = () => {
+  let username = "";
+  const token = localStorage.getItem("token");
+  function parseJwt(token) {
+    if (!token) {
+      return;
+    }
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    return JSON.parse(window.atob(base64));
+  }
+  if (token != null) {
+    username = parseJwt(token)["sub"];
+  } else {
+    console.error("Invalid token: " + token);
+  }
+  const history = createBrowserHistory({
+    forceRefresh: true,
+  });
+
+  const { enqueueSnackbar } = useSnackbar();
   let id = localStorage.getItem("selectedId");
   const [infoBook, setInfoBook] = useState([]);
+  const onBuy = async (value) => {
+    try {
+      const rs = await onBuyAPI(value);
+      console.log(rs);
+      if (rs.status === 200) {
+        
+        enqueueSnackbar("Sucessfully", { variant: "success" });
+      }
+      else {
+        enqueueSnackbar("Dont Enough Money To Buy", { variant: "error" });
+        history.push('/wallet/'+username)
+      }
+    } catch (error) {}
+  };
   useEffect(() => {
     const getInfoBook = async () => {
       try {

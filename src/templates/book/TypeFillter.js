@@ -54,6 +54,7 @@ export const TypeFillter = () => {
       <div className="content">
         <Menu />
         <div className="main-ctn">
+          <center><h1>Fillter Book On Selling</h1></center>
           {infoBook.map((row) => (
             <Card bg="light">
               <Card.Img variant="top" src={row.timestamp} />

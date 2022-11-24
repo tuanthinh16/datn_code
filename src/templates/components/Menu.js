@@ -133,7 +133,7 @@ export const Menu = () => {
             <NavDropdown.Item href="/book/country/menu.lan-vi">
               {t("menu.lan-vi")}
             </NavDropdown.Item>
-            <NavDropdown.Item href="/book/country/menu.lan-france">
+            <NavDropdown.Item href="/book/country/menu.country-france">
               {t("menu.country-france")}
             </NavDropdown.Item>
             <NavDropdown.Item href="/book/country/menu.lan-usa">

@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { createBrowserHistory } from "history";
 import { Button } from "react-bootstrap";
 import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
+import { useSnackbar } from "notistack";
 
 const postnew = [
   {
@@ -58,6 +59,14 @@ const postnew = [
     link: "https://www.baogiaothong.vn/vi-sao-van-hoc-viet-chua-du-suc-du-giai-nobel-d564547.html",
   },
 ];
+const col = [
+  {field:'_id',headerName:"ID",width:70},
+  {field:'name',headerName:"Name",width:130},
+  {field:'type',headerName:"Type",width:80},
+  {field:'nxb',headerName:"NXB",width:80},
+  {field:'sl',headerName:"Sl",width:20},
+  {field:'country',headerName:"Country",width:50}
+]
 const getAllbooks = () => {
   return postAPI("/book/getall");
 };
@@ -156,7 +165,7 @@ export const Index = () => {
               </h7>
             </div>
             <div className="total-block">
-              <h3>Total Block</h3>
+              <h3>Total Transfer</h3>
               <h3> {totalblock}</h3>
               <h7>
                 80% <ArrowDropUpOutlinedIcon />
@@ -348,6 +357,7 @@ export const InfoBuy = () => {
     username = "";
     console.error("Invalid token: " + token);
   }
+  const { enqueueSnackbar } = useSnackbar();
   let id = localStorage.getItem("selectedBookId");
   const [infoBook, setInfoBook] = React.useState([]);
   const history = createBrowserHistory({
@@ -359,12 +369,17 @@ export const InfoBuy = () => {
       if (rs.status === 200) {
         setInfoBook(rs["data"]);
         console.log(rs.data);
+        enqueueSnackbar("Sucessfully", { variant: "success" });
+      }
+      else{
+        enqueueSnackbar("Dont Enough Money To Buy", { variant: "error" });
+        history.push('/wallet/'+username)
       }
     } catch (error) {}
   };
-  const onBuy = (id) => {
+  const onBuy = async(id) => {
     try {
-      const rs = onBuyAPI(id);
+      const rs = await onBuyAPI(id);
       if (rs.status === 200) {
         console.log(rs.data);
         history.push("/profile/" + username);
