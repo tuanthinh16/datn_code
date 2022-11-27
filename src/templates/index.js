@@ -25,6 +25,7 @@ import { createBrowserHistory } from "history";
 import { Button } from "react-bootstrap";
 import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
 import { useSnackbar } from "notistack";
+import { DataGrid } from "@mui/x-data-grid";
 
 const postnew = [
   {
@@ -59,16 +60,12 @@ const postnew = [
     link: "https://www.baogiaothong.vn/vi-sao-van-hoc-viet-chua-du-suc-du-giai-nobel-d564547.html",
   },
 ];
-const col = [
-  {field:'_id',headerName:"ID",width:70},
-  {field:'name',headerName:"Name",width:130},
-  {field:'type',headerName:"Type",width:80},
-  {field:'nxb',headerName:"NXB",width:80},
-  {field:'sl',headerName:"Sl",width:20},
-  {field:'country',headerName:"Country",width:50}
-]
+
 const getAllbooks = () => {
   return postAPI("/book/getall");
+};
+const getAllblock = () => {
+  return postAPI("/block/getall");
 };
 const getTotalBooks = () => {
   return postAPI("/book/gettotal");
@@ -80,161 +77,155 @@ const getTotalBlocks = () => {
   return postAPI("/block/gettotal");
 };
 export const Index = () => {
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = (id) => {
-    setOpen(true);
-    localStorage.setItem("selectedBookId", id);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const { t } = useTranslation();
   const history = createBrowserHistory({
     forceRefresh: true,
   });
   const [book, setBook] = React.useState([]);
+  const [block, setBlock] = React.useState([]);
   const [totalbook, setTotalBook] = React.useState();
   const [totalblock, setTotalBlock] = React.useState();
   const [totalwallet, setTotalWallet] = React.useState();
+
+  const getAllbook = async () => {
+    try {
+      const rs = await getAllbooks();
+      if (rs.status === 200) {
+        setBook(rs.data);
+        console.log(rs.data);
+      }
+    } catch (error) {}
+  };
+  const getAllBlock =async()=>{
+    try {
+      const rs = await getAllblock();
+      if(rs.status === 200){
+        setBlock(rs.data);
+      }
+    } catch (error) {
+      
+    }
+  }
+  const getTotalWallet = async () => {
+    try {
+      const rs = await getTotalWallets();
+      if (rs.status === 200) {
+        setTotalWallet(rs.data);
+      }
+    } catch (error) {}
+  };
+  const getTotalBook = async () => {
+    try {
+      const rs = await getTotalBooks();
+      if (rs.status === 200) {
+        setTotalBook(rs.data);
+      }
+    } catch (error) {}
+  };
+  const getTotalBlock = async () => {
+    try {
+      const rs = await getTotalBlocks();
+      if (rs.status === 200) {
+        setTotalBlock(rs.data);
+      }
+    } catch (error) {}
+  };
   React.useEffect(() => {
-    const getAllbook = async () => {
-      try {
-        const rs = await getAllbooks();
-        if (rs.status === 200) {
-          setBook(rs.data);
-          console.log(rs.data);
-        }
-      } catch (error) {}
-    };
-    getAllbook();
-  }, []);
-  React.useEffect(() => {
-    const getTotalBook = async () => {
-      try {
-        const rs = await getTotalBooks();
-        if (rs.status === 200) {
-          setTotalBook(rs.data);
-        }
-      } catch (error) {}
-    };
     getTotalBook();
-    const getTotalBlock = async () => {
-      try {
-        const rs = await getTotalBlocks();
-        if (rs.status === 200) {
-          setTotalBlock(rs.data);
-        }
-      } catch (error) {}
-    };
+    getAllBlock();
+    getAllbook();
     getTotalBlock();
-    const getTotalWallet = async () => {
-      try {
-        const rs = await getTotalWallets();
-        if (rs.status === 200) {
-          setTotalWallet(rs.data);
-        }
-      } catch (error) {}
-    };
     getTotalWallet();
   }, []);
+  const col = [
+    {field:'_id',headerName:"Block ID",width:90},
+    {field:'prehash',headerName:"Pre-Hash",width:300},
+    {field:'data',headerName:"Data",width:310},
+    {field:'timestamp',headerName:"Time Stamp",width:200},
+    {field:'hash',headerName:"Hash",width:300},
+  ]
+  const colum =[
+    {field:'_id',headerName:"Mã Sách",width:100},
+    {field:'name',headerName:"Tên Sách",width:400},
+    {field:'nxb',headerName:"NXB",width:200},
+    {field:'type',headerName:"Thể Loại",width:150},
+    {field:'sl',headerName:"Số lượng",width:50},
+    {field:'country',headerName:"Quốc Gia",width:200}
+  ]
+  const actionColumns =[
+    {field:'action',
+    headerName:'Action',
+    width:70,
+    renderCell:(params)=>{
+      return(
+        <div className="view">
+          <Button onClick={()=>history.push('/book/profile/'+params.row._id)}>View</Button>
+        </div>
+      )
+    }
+    }
+  ]
   return (
     <Wrapper>
       <Header />
       <div className="homeindex">
         <Menu />
         <div className="content">
-          <h1>Dashboard</h1>
-          <p style={{ opacity: "0.8" }}>Dashboard/Book Transfer</p>
+          <h1>Bảng tin</h1>
+          <p style={{ opacity: "0.8" }}>Bảng tin/Giao dịch</p>
           <div className="dashboard">
             <div className="total-books">
-              <h3>Total Books</h3>
+              <h3>Tổng số sách</h3>
               <h3> {totalbook}</h3>
               <h7>
                 100% <ArrowDropUpOutlinedIcon />
-                This Week
+                So với tuần trước
               </h7>
             </div>
             <div className="total-wallet">
-              <h3>Total Wallet</h3>
+              <h3>Tổng ví người dùng</h3>
               <h3> {totalwallet}</h3>
               <h7>
                 50% <ArrowDropUpOutlinedIcon />
-                This Week
+                So với tuần trước
               </h7>
             </div>
             <div className="total-block">
-              <h3>Total Transfer</h3>
+              <h3>Tổng giao dịch</h3>
               <h3> {totalblock}</h3>
               <h7>
                 80% <ArrowDropUpOutlinedIcon />
-                This Week
+                So với tuần trước
               </h7>
             </div>
           </div>
           <div className="main-detail">
             <div className="list-book">
-              <h1> All Books</h1>
-              <p style={{ opacity: "0.8" }}>List all book on website</p>
-              <TableContainer component={Paper}>
-                <Table aria-label="caption  table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="header">Name</TableCell>
-                      <TableCell className="header" align="right">
-                        NXB
-                      </TableCell>
-                      <TableCell className="header" align="right">
-                        Type
-                      </TableCell>
-                      <TableCell className="header" align="right">
-                        Amount&nbsp;(book)
-                      </TableCell>
-                      <TableCell className="header" align="right">
-                        Country
-                      </TableCell>
-                      <TableCell className="header" align="right">
-                        Acction
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {book.map((row) => (
-                      <TableRow
-                        key={row.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row" align="left">
-                          <Button
-                            variant="link"
-                            onClick={() =>
-                              history.push("/book/profile/" + row._id)
-                            }
-                          >
-                            {row.name}
-                          </Button>
-                        </TableCell>
-                        <TableCell align="right">{row.nxb}</TableCell>
-                        <TableCell align="right">{t(row.type)}</TableCell>
-                        <TableCell align="right">{row.sl}</TableCell>
-                        <TableCell align="right">{t(row.country)}</TableCell>
-                        <TableCell align="right">
-                          <Button
-                            variant="primary"
-                            onClick={() => handleClickOpen(row._id)}
-                          >
-                            BUY
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Dialog
+              <h1> Sách</h1>
+              <p style={{ opacity: "0.8" }}>Thống kê sách có trên hệ thống</p>
+              <div style={{ height: 400, width: '100%' ,backgroundColor:'white',padding:'10px'}}>
+                <DataGrid
+                  rows={book}
+                  columns={colum.concat(actionColumns)}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  getRowId={(row) => row._id}
+                  
+                />
+              </div>
+              <h1> Block</h1>
+              <p style={{ opacity: "0.8" }}>Thống kê các khối giao dịch  có trên hệ thống</p>
+              <div style={{ height: 400, width: '100%' ,backgroundColor:'white',padding:'10px'}}>
+                <DataGrid
+                  rows={block}
+                  columns={col}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  getRowId={(row) => row._id}
+                />
+              </div>
+              {/* <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
@@ -243,11 +234,11 @@ export const Index = () => {
                 maxWidth="lg"
               >
                 <InfoBuy />
-              </Dialog>
+              </Dialog> */}
             </div>
             <div className="news">
-              <h1>News</h1>
-              <p style={{ opacity: "0.8" }}>News/Press</p>
+              <h1>Tin tức</h1>
+              <p style={{ opacity: "0.8" }}>Tin tức/Mới nhất</p>
               <div className="main-content">
                 {postnew.map((row) => (
                   <Card sx={{ maxWidth: 345 }}>
@@ -268,7 +259,7 @@ export const Index = () => {
                     </CardContent>
                     <CardActions>
                       <Link target="_blank" href={row.link}>
-                        View More
+                        Chi tiết
                       </Link>
                     </CardActions>
                   </Card>
@@ -369,12 +360,9 @@ export const InfoBuy = () => {
       if (rs.status === 200) {
         setInfoBook(rs["data"]);
         console.log(rs.data);
-        enqueueSnackbar("Sucessfully", { variant: "success" });
+
       }
-      else{
-        enqueueSnackbar("Dont Enough Money To Buy", { variant: "error" });
-        history.push('/wallet/'+username)
-      }
+      
     } catch (error) {}
   };
   const onBuy = async(id) => {
@@ -382,7 +370,12 @@ export const InfoBuy = () => {
       const rs = await onBuyAPI(id);
       if (rs.status === 200) {
         console.log(rs.data);
+        enqueueSnackbar("Sucessfully", { variant: "success" });
         history.push("/profile/" + username);
+      }
+      else{
+        enqueueSnackbar("Dont Enough Money To Buy", { variant: "error" });
+        history.push('/wallet/'+username)
       }
     } catch (error) {}
   };
@@ -397,18 +390,18 @@ export const InfoBuy = () => {
           <h1>{infoBook.name}</h1>
           <p>{infoBook.detail}</p>
           <h3>
-            {"Availd: "}
+            {"Khả dụng: "}
             {infoBook.amount}
           </h3>
           {infoBook.username == username ? (
             <Button>
-              {"YOU SELL"}{" "}
+              {"Sách của bạn"}{" "}
               {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
               {"$"}
             </Button>
           ) : (
             <Button onClick={() => onBuy(infoBook._id)}>
-              {"GET WITH"}{" "}
+              {"Mua với "}{" "}
               {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
               {"$"}
             </Button>

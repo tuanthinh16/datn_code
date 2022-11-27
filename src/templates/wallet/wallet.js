@@ -420,7 +420,7 @@ export const Deposit = () => {
   };
   return (
     <Wrapper>
-      <h2 style={{ color: "red", "text-align": "center" }}> Choose Methods</h2>
+      <h2 style={{ color: "red", "text-align": "center" }}> Chọn Phương Thức</h2>
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
@@ -434,7 +434,7 @@ export const Deposit = () => {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <p>Select Amount</p>
+          <p>Chọn số tiền</p>
           <ButtonGroup variant="text" aria-label="text button group">
             {curency.map((row) => (
               <Button onClick={() => onSelected(row.usd)}>
@@ -466,7 +466,7 @@ export const Deposit = () => {
             style={{ float: "right", marginTop: "10px" }}
             onClick={_onBuy}
           >
-            Create
+            Nạp
           </Button>
           {console.log(detail.nd)}
         </TabPanel>
@@ -478,7 +478,7 @@ export const Deposit = () => {
             label="Your Full Name"
             variant="outlined"
           />
-          <InputLabel htmlFor="filled-adornment-amount">Card Number</InputLabel>
+          <InputLabel htmlFor="filled-adornment-amount">Số thẻ</InputLabel>
           <OutlinedInput
             id="outlined-adornment-amount"
             startAdornment={
@@ -498,7 +498,7 @@ export const Deposit = () => {
           />
           <hr />
           <center>
-            <Button>ADD Card</Button>
+            <Button>Thêm Thẻ</Button>
           </center>
         </TabPanel>
         <TabPanel value={value} index={2}>
@@ -564,11 +564,11 @@ export const Send = () => {
   return (
     <Wrapper>
       <h2 style={{ color: "red", "text-align": "center" }}>
-        Give Your Money To Other User
+        Gửi Tài Sản Đến Người Dùng Khác
       </h2>
       <div className="container-send" style={{ display: "flex" }}>
         <FormControl>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+          <InputLabel htmlFor="outlined-adornment-amount">Số Lượng</InputLabel>
 
           {info.balance >= values.amount ? (
             <OutlinedInput
@@ -597,7 +597,7 @@ export const Send = () => {
         <TextField
           sx={{ width: "50ch" }}
           onChange={handleChange("address")}
-          label="Enter wallet address to send"
+          label="Nhập địa chỉ ví người dùng"
           id="fullWidth"
         />
         <Button variant="primary" onClick={onSend}>
@@ -609,7 +609,7 @@ export const Send = () => {
           ""
         ) : (
           <small>
-            Plase enter smaller amount. Your amount: {info.balance} $
+            Vui lòng nhập số lượng ít hơn. Tổng tiền có sẵn: {info.balance} $
           </small>
         )}
       </center>

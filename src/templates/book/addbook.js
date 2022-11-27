@@ -37,6 +37,7 @@ export default function AddBook() {
     amount: "",
     nxb: "",
     datexb: "",
+    pdf: "",
   });
   const onValueChange_name = (e) => {
     setInfo((prev) => ({ ...prev, name: e.target.value }));
@@ -58,6 +59,9 @@ export default function AddBook() {
   };
   const onValueChange_datexb = (e) => {
     setInfo((prev) => ({ ...prev, datexb: e.target.value }));
+  };
+  const onValueChange_pdf = (e) => {
+    setInfo((prev) => ({ ...prev, pdf: e.target.value }));
   };
   /// file upload
   const [selectedImages, setSelectedImages] = useState([]);
@@ -82,6 +86,7 @@ export default function AddBook() {
     data.append("nxb", info.nxb);
     data.append("date", info.datexb);
     data.append("sl", info.amount);
+    data.append("pdf",info.pdf);
     data.append("fileIMG", setSelectedImages);
     try {
       const rs = await AddAPI(data);
@@ -158,27 +163,12 @@ export default function AddBook() {
                 defaultValue="Choose..."
                 onChange={onValueChange_type}
               >
-                <option value="cate-action">
-                  {t("menu.categories-action")}
-                </option>
-                <option value="cate-art">{t("menu.categories-art")}</option>
                 <option value="cate-business">
                   {t("menu.categories-business")}
                 </option>
                 <option value="cate-computer">
                   {t("menu.categories-computer")}
                 </option>
-                <option value="cate-history">
-                  {t("menu.categories-history")}
-                </option>
-                <option value="cate-entertainment">
-                  {t("menu.categories-entertainment")}
-                </option>
-                <option value="cate-sport">{t("menu.categories-sport")}</option>
-                <option value="cate-travel">
-                  {t("menu.categories-travel")}
-                </option>
-                <option value="cate-teen">{t("menu.categories-teen")}</option>
                 <option value="cate-other">{t("menu.categories-other")}</option>
               </Form.Select>
             </Form.Group>
@@ -226,6 +216,12 @@ export default function AddBook() {
             <Form.Group as={Col} controlId="formGridDatXB">
               <Form.Label>{t("book.date-xb")}</Form.Label>
               <Form.Control onChange={onValueChange_datexb} />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGridNXB">
+              <Form.Label>Link to PDF file:</Form.Label>
+              <Form.Control onChange={onValueChange_pdf} />
             </Form.Group>
           </Row>
           <Form.Group className="mb-3">

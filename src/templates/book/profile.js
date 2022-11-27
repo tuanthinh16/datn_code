@@ -14,12 +14,13 @@ import { useParams } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Menu } from "../components/Menu";
 import styled from "@emotion/styled";
-import { TextField } from "@mui/material";
+import { Paper, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { Footer } from "../components/Footer";
 import SendTimeExtensionIcon from "@mui/icons-material/SendTimeExtension";
 import { useSnackbar } from "notistack";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { Table } from "react-bootstrap";
 
 const getbookAPI = (idBook) => {
   return getAPI("/book/profile/" + idBook);
@@ -36,6 +37,9 @@ const onDeleteAPI = (id) => {
 const onLikeAPI = (id) => {
   return postAPI("/book/comment/like/" + id);
 };
+const getWorkAPI=(id)=> {
+  return postAPI("/book/get-work/"+id)
+}
 export default function BProfile() {
   const [cmt, setCmt] = useState();
   const [comment, setComment] = useState([]);
@@ -52,6 +56,7 @@ export default function BProfile() {
   const [showA, setShowA] = useState(false);
   const toggleShowA = () => setShowA(!showA);
   const [open, setOpen] = React.useState(false);
+  const [work, setWork] = React.useState([]);
   function parseJwt(token) {
     if (!token) {
       return;
@@ -96,6 +101,7 @@ export default function BProfile() {
   useEffect(() => {
     getInfoBook();
     getComment();
+    getWOrk();
   }, []);
   const handleClickOpen = () => {
     setOpen(true);
@@ -106,6 +112,18 @@ export default function BProfile() {
   };
   const onValueChange = (e) => {
     setCmt(e.target.value);
+  };
+  const getWOrk = async () => {
+    try {
+      const result = await getWorkAPI(idBook);
+      if (result.status === 200) {
+        // console.log(result['data']['data'])
+        setWork(result["data"]);
+        // setWork({BlockID:result['data']['data']['BlockID'],FromUser:result['data']['data']['From User'],Hash:result['data']['data']['Hash'],ID:result['data']['data']['ID'],Methods:result['data']['data']['Methods'],TimeStamp:result['data']['data']['Timestamp'],Touser:result['data']['data']['To User'],value:result['data']['data']['value']});
+      }
+    } catch (e) {
+      console.log("error: ", e);
+    }
   };
   const onPutcmt = async () => {
     const fdata = new FormData();
@@ -155,7 +173,7 @@ export default function BProfile() {
               {infoBook.Name}
             </Alert.Heading>
             <Alert.Heading style={{ "font-style": "italic" }}>
-              Country:{t(infoBook.Country)}
+              Quốc Gia:{t(infoBook.Country)}
             </Alert.Heading>
             <p>{infoBook.Details}</p>
             <hr />
@@ -163,11 +181,11 @@ export default function BProfile() {
               {infoBook.Nhaxuatban} {infoBook.Ngayxuatban}
             </Alert.Heading>
 
-            <Alert.Heading>Type: {t(infoBook.Type)}</Alert.Heading>
-            <p className="mb-0">Amount {infoBook.Soluong} </p>
+            <Alert.Heading>Thể Loại: {t(infoBook.Type)}</Alert.Heading>
+           
           </Alert>
           <div className="all-comment">
-            <h1>All Comment From User</h1>
+            <h1>Trao đổi</h1>
             {comment.map((row) => (
               <Alert.Heading>
                 <div className="detail-cmt">
@@ -210,6 +228,89 @@ export default function BProfile() {
                 <SendTimeExtensionIcon />
               </Button>
             </div>
+          </div>
+          <div className="work">
+            <h1>Hoạt động</h1>
+            <TableContainer component={Paper}>
+                <Table
+                  sx={{ minWidth: 650 }}
+                  size="small"
+                  aria-label="a dense table"
+                >
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Block ID
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="th"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Hash
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="th"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Methods
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="th"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Time Stamp
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="th"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Username
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className="th"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        Value
+                      </TableCell>
+                      
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {work.map((row) => (
+                      <TableRow
+                        key={row.blockID}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.blockID}
+                        </TableCell>
+                        <TableCell align="left">{row.hash}</TableCell>
+                        {row.methods == 'sell'?(
+                          <TableCell align="left" style={{backgroundColor:'red',color:'white',fontWeight:'bold'}}>{row.methods.toUpperCase()}</TableCell>
+                        ):(
+                          <TableCell align="left" style={{backgroundColor:'green',color:'white',fontWeight:'bold'}}>{row.methods.toUpperCase()}</TableCell>
+                        )}
+
+                        <TableCell align="left" style={{ color: "green" }}>
+                          {row.timestamp}
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.username}
+                        </TableCell>
+                        <TableCell align="left">{row.value}</TableCell>
+                        
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
           </div>
         </div>
       </div>

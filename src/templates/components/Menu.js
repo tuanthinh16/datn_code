@@ -59,18 +59,7 @@ export const Menu = () => {
             title={t("menu.categories")}
             menuVariant="dark"
           >
-            <NavDropdown.Item
-              href="/book/type/menu.categories-action"
-              className="item"
-            >
-              {t("menu.categories-action")}
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/book/type/menu.categories-art"
-              className="item"
-            >
-              {t("menu.categories-art")}
-            </NavDropdown.Item>
+            
             <NavDropdown.Item
               href="/book/type/menu.categories-business"
               className="item"
@@ -84,37 +73,7 @@ export const Menu = () => {
             >
               {t("menu.categories-computer")}
             </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/book/type/menu.categories-history"
-              className="item"
-            >
-              {t("menu.categories-history")}
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/book/type/menu.categories-entertainment"
-              className="item"
-            >
-              {t("menu.categories-entertainment")}
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item
-              href="/book/type/menu.categories-sport"
-              className="item"
-            >
-              {t("menu.categories-sport")}
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/book/type/menu.categories-travel"
-              className="item"
-            >
-              {t("menu.categories-travel")}
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              href="/book/type/menu.categories-teen"
-              className="item"
-            >
-              {t("menu.categories-teen")}
-            </NavDropdown.Item>
+            
             <NavDropdown.Divider />
             <NavDropdown.Item
               href="/book/type/menu.categories-other"

@@ -26,8 +26,10 @@ import SellForm from "../book/sellForm";
 import Dialog from "@mui/material/Dialog";
 import { Link } from "react-router-dom";
 import { Header } from "../components/Header";
-import { TextField } from "@mui/material";
+import { FormControl, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import styled from "@emotion/styled";
+import { OnDeviceTrainingTwoTone } from "@mui/icons-material";
 const getWork = (username) => {
   return getAPI("/profile/get-work/" + username);
 };
@@ -70,6 +72,7 @@ export default function Profile() {
     phone: "000xxx",
     Timecreated: "",
   });
+
   function parseJwt(token) {
     if (!token) {
       return;
@@ -147,10 +150,19 @@ export default function Profile() {
     ),
   ];
   //copy cliboard
+  const [opens, setOpens] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-
+  var link = "https://tiki.vn/search?q="
   const onSell = (id) => {
     localStorage.setItem("idbook", id);
+    setOpens(true);
+  };
+
+  const handleCloses = () => {
+    setOpens(false);
+  };
+  const onShip = (name) => {
+    localStorage.setItem("idbook", name);
     setOpen(true);
   };
 
@@ -175,6 +187,7 @@ export default function Profile() {
       setIsedit(false)
     }
   }
+
   return (
     <Container style={{ "margin-left": "0" }}>
       <Header />
@@ -210,15 +223,14 @@ export default function Profile() {
                   value={info.addressWallet}
                 >
                   {info.addressWallet}
-                  <p id="helpText">Click to copy Clipboard</p>
+                  <p id="helpText">Sao chép</p>
                 </Button>{" "}
               </i>
             </p>
             {console.log(clipboard)}
           </Card.Title>
           <Card.Text>
-            A member is excellence on forum with a lot of post high quality
-            about some book and give some suggestions for newbie.
+            Một thành viên xuất sắc và có nhiều đóng góp trong việc xây dựng hệ thống .
           </Card.Text>
           <Button variant="outlined" style={{position:'absolute',right:'0px'}} onClick={()=> setIsedit(true)}><EditIcon/></Button>
           <br/>
@@ -242,7 +254,7 @@ export default function Profile() {
           )
           }
           </ListGroup.Item>
-          <ListGroup.Item>Address:  {' '}
+          <ListGroup.Item>Địa chỉ:  {' '}
           {isedit ?(
             <TextField 
             id="standard-helperText"
@@ -260,7 +272,7 @@ export default function Profile() {
           )
           }
           </ListGroup.Item>
-          <ListGroup.Item>Phone Number: {' '}
+          <ListGroup.Item>Điện thoại: {' '}
           {isedit ?(
             <TextField 
             id="standard-helperText"
@@ -278,7 +290,7 @@ export default function Profile() {
           )
           }
           </ListGroup.Item>
-          <ListGroup.Item>Time Created: {info.Timecreated}</ListGroup.Item>
+          <ListGroup.Item>Thời gian tạo: {info.Timecreated}</ListGroup.Item>
           {isedit?(
             <Button onClick={onEdit}>Update</Button>
           )
@@ -292,7 +304,7 @@ export default function Profile() {
           >
             <Tab
               eventKey="work"
-              title="Work"
+              title="Hoạt Động"
               style={{ height: 400, width: "100%" }}
             >
               <TableContainer component={Paper}>
@@ -370,7 +382,7 @@ export default function Profile() {
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                            {row.methods.toUpperCase()}
                           </TableCell>
                         ) : row.methods == "add_book" ? (
                           <TableCell
@@ -380,7 +392,7 @@ export default function Profile() {
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                             {row.methods.toUpperCase()}
                           </TableCell>
                         ) : rows.methods === "deposit" ? (
                           <TableCell
@@ -390,7 +402,7 @@ export default function Profile() {
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                             {row.methods.toUpperCase()}
                           </TableCell>
                         ) : row.methods === "withdraw" ? (
                           <TableCell
@@ -400,7 +412,7 @@ export default function Profile() {
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                             {row.methods.toUpperCase()}
                           </TableCell>
                         ) : row.methods == "sell" ? (
                           <TableCell
@@ -410,17 +422,27 @@ export default function Profile() {
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                             {row.methods.toUpperCase()}
                           </TableCell>
-                        ) : (
+                        ) : row.methods == 'sold'?(
                           <TableCell
                             align="left"
                             style={{
-                              backgroundColor: "#0d6efd",
+                              backgroundColor: "#af6f25",
                               color: "white",
                             }}
                           >
-                            {row.methods}
+                             {row.methods.toUpperCase()}
+                          </TableCell>
+                        ):(
+                          <TableCell
+                            align="left"
+                            style={{
+                              backgroundColor: "#1d6ce2",
+                              color: "white",
+                            }}
+                          >
+                             {row.methods.toUpperCase()}
                           </TableCell>
                         )}
 
@@ -465,8 +487,7 @@ export default function Profile() {
                 </Table>
               </TableContainer>
             </Tab>
-            <Tab eventKey="product" title="Product" style={{ display: "flex" }}>
-              {console.log("Book", book)}
+            <Tab eventKey="product" title="Sản Phẩm" style={{ display: "flex" }}>
               {book.map((row) => (
                 <Card style={{ display: "contents", padding: "10px" }}>
                   {/* <Card.Img variant="top" src={avt} /> */}
@@ -490,8 +511,13 @@ export default function Profile() {
                       {row.timestamp}
                     </Card.Text>
                     <Button variant="primary" onClick={() => onSell(row._id)}>
-                      Put Market
+                      Bán
                     </Button>
+                    <br />
+                    <Link target="_blank" href={row.pdf}>
+                        Tải
+                    </Link>
+                    <Button variant='link' onClick={()=>onShip(row.name)}>Nhận</Button>
                   </Card.Body>
                 </Card>
               ))}
@@ -499,15 +525,79 @@ export default function Profile() {
           </Tabs>
         </Card.Body>
         <Dialog
-          open={open}
-          onClose={handleClose}
+          open={opens}
+          onClose={handleCloses}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth="lg    "
         >
           <SellForm />
         </Dialog>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="lg    "
+        >
+          <Nhan />
+        </Dialog>
       </Card>
     </Container>
   );
 }
+export const Nhan = ()=>{
+  const openInNewTab = url => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  let pay = 5
+  let id = localStorage.getItem('idbook')
+  const [amount,setAmount] = useState(0);
+  const onValueChange = (event) => {
+    setAmount(event.target.value);
+  }
+  return(
+    <Wapper>
+      <div className="ctn">
+        <h1>Nhận Sách Tại Nhà Của Bạn</h1>
+        Tên Sách:{id}
+        <hr/>
+        <div className="info">
+          
+          <TextField id="outlined-basic" label="Tên người nhận" variant="outlined" />
+          <TextField id="outlined-basic" label="SDT" variant="outlined" />
+        
+        </div>
+        <br></br>
+        <div className="address">
+          <TextField id="outlined-basic" label="Tỉnh/Thành Phố" variant="outlined" />
+          <TextField id="outlined-basic" label="Quận/Huyện" variant="outlined" />
+          <TextField id="outlined-basic" label="Chi tiết: Số nhà, đường" variant="outlined" />
+        </div>
+        <br></br>
+        <div className="sl">
+        <TextField
+              id="outlined-number"
+              label="Số lượng"
+              type="number"
+              onChange={onValueChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+        </div>
+        <hr />
+        <Button variant='primary'>Thanh toán {pay} {'$'}</Button>
+      </div>
+    </Wapper>
+  )
+}
+export const Wapper = styled.div`
+    .ctn{
+      padding: 10px;
+      .MuiTextField-root{
+        padding-left: 10px;
+      }
+    }
+
+`

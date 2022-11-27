@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./css/index2.css";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ import { Footer } from "./components/Footer";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
-import { ButtonGroup } from "@mui/material";
+import { ButtonGroup, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 
 const getBookAPI = () => {
@@ -23,8 +23,8 @@ const getBookAPI = () => {
 const getInfoBookSell = (id) => {
   return postAPI("/book/get-booksell-by-id/" + id);
 };
-const onBuyAPI = (id) => {
-  return postAPI("/book/buy/" + id);
+const onBuyAPI = (data) => {
+  return postAPI("/book/buy",data);
 };
 
 function Home() {
@@ -116,7 +116,7 @@ function Home() {
                 </Card.Text>
                 <Card.Text>
                   {row.username === username ? (
-                    <i>Your Book</i>
+                    <i>Của bạn</i>
                   ) : (
                     "user: " + row.username
                   )}
@@ -128,7 +128,7 @@ function Home() {
                     variant="primary"
                     onClick={() => handleClickOpen(row._id)}
                   >
-                    Detail
+                    Chi tiết
                   </Button>
                 )}
               </Card.Body>
@@ -190,29 +190,35 @@ export const Detailbook = () => {
   const { enqueueSnackbar } = useSnackbar();
   let id = localStorage.getItem("selectedId");
   const [infoBook, setInfoBook] = useState([]);
-  const onBuy = async (value) => {
+  const [amount,setAmount] = useState(0);
+  const onValueChange = (event) => {
+    setAmount(event.target.value);
+  }
+  const onBuy = async (id) => {
     try {
-      const rs = await onBuyAPI(value);
-      console.log(rs);
+      const data = new FormData();
+      data.append("id",id)
+      data.append('amount',amount)
+      const rs = await onBuyAPI(data);
       if (rs.status === 200) {
-        
+        getInfoBook();
         enqueueSnackbar("Sucessfully", { variant: "success" });
       }
       else {
-        enqueueSnackbar("Dont Enough Money To Buy", { variant: "error" });
+        enqueueSnackbar("Không đủ tiền", { variant: "error" });
         history.push('/wallet/'+username)
       }
     } catch (error) {}
   };
+  const getInfoBook = async () => {
+    try {
+      const rs = await getInfoBookSell(id);
+      if (rs.status === 200) {
+        setInfoBook(rs["data"]);
+      }
+    } catch (error) {}
+  };
   useEffect(() => {
-    const getInfoBook = async () => {
-      try {
-        const rs = await getInfoBookSell(id);
-        if (rs.status === 200) {
-          setInfoBook(rs["data"]);
-        }
-      } catch (error) {}
-    };
     getInfoBook();
   }, []);
   return (
@@ -223,16 +229,32 @@ export const Detailbook = () => {
           <h1>{infoBook.name}</h1>
           <p>{infoBook.detail}</p>
           <h3>
-            {"Availd: "}
+            {"Khả dụng: "}
             {infoBook.amount}
           </h3>
-          <ButtonGroup>
-            <Button onClick={() => onBuy(infoBook._id)}>
-              {"GET WITH"}{" "}
-              {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
+          <div className="amount-buy">
+              <TextField
+              id="outlined-number"
+              label="Số lượng mua"
+              type="number"
+              onChange={onValueChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </div>
+            {parseInt(infoBook.amount) >= amount ?(
+              <Button onClick={() => onBuy(infoBook._id)}>
+              {"Mua với "}{" "}
+              {((parseInt(infoBook.price) / valueConvert)/infoBook.amount *amount).toFixed(3)}
               {"$"}
             </Button>
-          </ButtonGroup>
+            ):(<Button variant='disable'>
+            {"Mua với "}{" "}
+            {(parseInt(infoBook.price) / valueConvert).toFixed(3)}
+            {"$"}
+          </Button>
+          )}
         </div>
       </div>
     </Wrapper>

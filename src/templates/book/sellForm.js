@@ -64,14 +64,14 @@ export default function SellForm() {
         <img src={url}></img>
       </div>
       <div className="content-sell">
-        <p>{infoBook.Name}</p>
-        <p>{infoBook.Nhaxuatban}</p>
+        <p>{'Tên Sách: '}{infoBook.Name}</p>
+        <p>{'Nhà Xuất Bản: '}{infoBook.Nhaxuatban}</p>
         <p>
-          {"Type: "}
+          {"Thể Loại: "}
           {t(infoBook.Type)}
         </p>
         <div class="mb-3">
-          <span>Pirce </span>
+          <span>Giá </span>
           <input
             type="text"
             class="form-control"
@@ -82,11 +82,11 @@ export default function SellForm() {
             placeholder="VND"
           />
           <small id="helpId" class="form-text text-muted">
-            Please input your pice you want to sell
+            Vui lòng nhập giá tiền
           </small>
         </div>
         <div class="mb-3">
-          <span>Amount </span>
+          <span>Số Lượng </span>
           <input
             type="text"
             class="form-control"
@@ -98,22 +98,22 @@ export default function SellForm() {
           />
           {parseInt(data.amount) > parseInt(infoBook.Soluong) ? (
             <small id="helpId" class="form-text text-muted">
-              Please enter a smaller {infoBook.Soluong}quantity
+              Vui lòng nhập số lượng ít hơn {infoBook.Soluong} quyển
             </small>
           ) : (
             <small id="helpId" class="form-text text-muted">
-              Please input amount of book to sell
+              Vui lòng nhập số lượng bán
             </small>
           )}
         </div>
         {console.log(parseInt(infoBook.Soluong))}
         {parseInt(data.amount) > parseInt(infoBook.Soluong) ? (
           <Button type="submit" disable>
-            Put
+            Đặt
           </Button>
         ) : (
           <Button type="submit" onClick={onSell}>
-            Put
+            Đặt
           </Button>
         )}
       </div>
