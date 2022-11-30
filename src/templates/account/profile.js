@@ -52,6 +52,12 @@ const sellAPI = (id) => {
 const onEditAPI =(data)=>{
   return postAPI("/account/edit" ,data);
 }
+const getInfoBook = (id)=>{
+  return getAPI("/book/profile/" + id);
+}
+const onAddShip =(id,data)=>{
+  return postAPI("/book/shipForm/" + id,data);
+}
 export default function Profile() {
   const [clipboard, copyToClipboard] = useClipboard();
   const toClipboard = "I want to go to the clipboard";
@@ -161,8 +167,8 @@ export default function Profile() {
   const handleCloses = () => {
     setOpens(false);
   };
-  const onShip = (name) => {
-    localStorage.setItem("idbook", name);
+  const onShip = (id) => {
+    localStorage.setItem("idbook", id);
     setOpen(true);
   };
 
@@ -514,10 +520,10 @@ export default function Profile() {
                       Bán
                     </Button>
                     <br />
-                    <Link target="_blank" href={row.pdf}>
-                        Tải
-                    </Link>
-                    <Button variant='link' onClick={()=>onShip(row.name)}>Nhận</Button>
+                    <Button variant='link' onClick={()=>window.open(row.pdf,"_blank")}>
+                        Xem
+                    </Button>
+                    <Button variant='link' onClick={()=>onShip(row._id)}>Nhận</Button>
                   </Card.Body>
                 </Card>
               ))}
@@ -547,14 +553,47 @@ export default function Profile() {
   );
 }
 export const Nhan = ()=>{
+  const { enqueueSnackbar } = useSnackbar();
   const openInNewTab = url => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
   let pay = 5
   let id = localStorage.getItem('idbook')
   const [amount,setAmount] = useState(0);
+  const [info,setInfo] = useState({name:'',sdt:'',address1:'',address2:'',address3:''})
   const onValueChange = (event) => {
     setAmount(event.target.value);
+  }
+  const [book,setBook] = React.useState([]);
+  const getBook = async () => {
+    try {
+      const rsID = await getInfoBook(id);
+      if (rsID.status === 200) {
+        console.log(rsID['data']['data'])
+        setBook(rsID["data"]['data']);
+      }
+    } catch (error) {}
+  };
+  React.useEffect(()=>{
+    getBook();
+  },[]);
+  const onValueChangeInfo = (prop)=>(e)=>{
+    setInfo({ ...info, [prop]: e.target.value })
+  }
+  const onBook=async()=>{
+    try {
+      const data = new FormData();
+      data.append('name',info.name);
+      data.append('sdt',info.sdt);
+      data.append('amount',amount);
+      data.append('address',(info.address1+"/"+info.address2+"/"+info.address3));
+      const rs = await onAddShip(id,data);
+      if (rs.status === 200){
+        enqueueSnackbar("ADD Sucessfully", { variant: "success" });
+      }
+    } catch (error) {
+      
+    }
   }
   return(
     <Wapper>
@@ -564,15 +603,25 @@ export const Nhan = ()=>{
         <hr/>
         <div className="info">
           
-          <TextField id="outlined-basic" label="Tên người nhận" variant="outlined" />
-          <TextField id="outlined-basic" label="SDT" variant="outlined" />
+          <TextField id="outlined-basic" label="Tên người nhận" 
+          onChange={onValueChangeInfo('name')}
+          variant="outlined" />
+          <TextField id="outlined-basic" label="SDT" 
+          onChange={onValueChangeInfo('sdt')}
+          variant="outlined" />
         
         </div>
         <br></br>
         <div className="address">
-          <TextField id="outlined-basic" label="Tỉnh/Thành Phố" variant="outlined" />
-          <TextField id="outlined-basic" label="Quận/Huyện" variant="outlined" />
-          <TextField id="outlined-basic" label="Chi tiết: Số nhà, đường" variant="outlined" />
+          <TextField id="outlined-basic" label="Tỉnh/Thành Phố" 
+          onChange={onValueChangeInfo('address1')}
+          variant="outlined" />
+          <TextField id="outlined-basic" label="Quận/Huyện" 
+          onChange={onValueChangeInfo('address2')}
+          variant="outlined" />
+          <TextField id="outlined-basic" 
+          onChange={onValueChangeInfo('address3')}
+          label="Chi tiết: Số nhà, đường" variant="outlined" />
         </div>
         <br></br>
         <div className="sl">
@@ -587,7 +636,12 @@ export const Nhan = ()=>{
             />
         </div>
         <hr />
-        <Button variant='primary'>Thanh toán {pay} {'$'}</Button>
+        {console.log(book.amount)}
+        {parseInt(book.Soluong) >= amount ?(
+          <Button variant='primary' onClick={onBook}>Thanh toán {pay} {'$'}</Button>
+        ):(
+          <Button variant='primary' disabled>Thanh toán  {'$'}</Button>
+        )}
       </div>
     </Wapper>
   )

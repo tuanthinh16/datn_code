@@ -6,6 +6,7 @@ const logout = ()=>{
 }
 function Logout(){
     localStorage.removeItem("token");
+    localStorage.clear();
     React.useEffect(()=>{
         const Logout = async()=>{
             try {

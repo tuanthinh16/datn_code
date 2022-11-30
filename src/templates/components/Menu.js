@@ -61,14 +61,14 @@ export const Menu = () => {
           >
             
             <NavDropdown.Item
-              href="/book/type/menu.categories-business"
+              href="/book/type/cate-business"
               className="item"
             >
               {t("menu.categories-business")}
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item
-              href="/book/type/menu.categories-computer"
+              href="/book/type/cate-computer"
               className="item"
             >
               {t("menu.categories-computer")}
@@ -89,17 +89,14 @@ export const Menu = () => {
             title={t("menu.country")}
             menuVariant="dark"
           >
-            <NavDropdown.Item href="/book/country/menu.lan-vi">
+            <NavDropdown.Item href="/book/country/country-vn">
               {t("menu.lan-vi")}
             </NavDropdown.Item>
-            <NavDropdown.Item href="/book/country/menu.country-france">
+            <NavDropdown.Item href="/book/country/country-france">
               {t("menu.country-france")}
             </NavDropdown.Item>
-            <NavDropdown.Item href="/book/country/menu.lan-usa">
-              {t("menu.country-usa")}
-            </NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="/book/country/menu.lan-other">
+            <NavDropdown.Item href="/book/country/ountry-other">
               {t("menu.categories-other")}
             </NavDropdown.Item>
           </NavDropdown>

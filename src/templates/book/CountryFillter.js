@@ -41,7 +41,7 @@ export const CountryFillter = () => {
       <div className="content">
         <Menu />
         <div className="main-ctn">
-        <center><h1>Fillter Book On Selling</h1></center>
+        <center><h1>Hiển thị sách theo quốc gia</h1></center>
           {infoBook.map((row) => (
             <Card bg="light">
               <Card.Img variant="top" src={row.timestamp} />
@@ -75,7 +75,7 @@ export const CountryFillter = () => {
                   {"User: "}
                   {row.username}
                 </Card.Text>
-                <Button variant="primary">Detail</Button>
+                <Button variant="primary">Chi tiết</Button>
               </Card.Body>
             </Card>
           ))}

@@ -182,7 +182,7 @@ export default function BProfile() {
             </Alert.Heading>
 
             <Alert.Heading>Thể Loại: {t(infoBook.Type)}</Alert.Heading>
-           
+           <Button variant="outlined" onClick={()=> window.open(infoBook.pdf,"_blank")}>Xem</Button>
           </Alert>
           <div className="all-comment">
             <h1>Trao đổi</h1>
