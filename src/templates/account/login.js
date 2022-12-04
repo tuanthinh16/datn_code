@@ -70,10 +70,10 @@ export default function Login(){
             <div className="text-center">
               <img src={logo}
                 style={{width: '185px'}} alt="logo" onClick={()=>history.push('/')}/>
-              <h4 className="mt-1 mb-5 pb-1">We Are Forum Penguin Book</h4>
+              <h4 className="mt-1 mb-5 pb-1">Chúng Tôi Là Diễn Đàn PENGUIN</h4>
             </div>
 
-            <p>Please login to your account</p>
+            <p>Vui lòng đăng nhập tài khoản của bạn</p>
 
 
             <MDBInput wrapperClass='mb-4' label='Username' id='form1' type='text' onChange={onValueChange_Username}/>
@@ -82,13 +82,13 @@ export default function Login(){
 
             <div className="text-center pt-1 mb-5 pb-1">
               <MDBBtn className="mb-4 w-100 gradient-custom-2" onClick={onLogin}>Sign in</MDBBtn>
-              <a className="text-muted" href="#!">Forgot password?</a>
+              <a className="text-muted" href="#!">Quên mật khẩu?</a>
             </div>
 
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-              <p className="mb-0">Don't have an account?</p>
+              <p className="mb-0">Chưa có tài khoản?</p>
               <MDBBtn outline className='mx-2' color='danger'onClick={()=>history.push('/register')}>
-                Create one
+                Tạo Mới
               </MDBBtn>
             </div>
 
@@ -100,8 +100,8 @@ export default function Login(){
           <div className="d-flex flex-column  justify-content-center gradient-custom-2 h-100 mb-4">
 
             <div className="text-white px-3 py-4 p-md-5 mx-md-4">
-              <h2 class="mb-4-1">Book Information & Trading Forum</h2>
-              <p class="small mb-0">In order to bring the most enjoyable and convenient experience to users, especially those with a passion for books. The website offers convenience and excellent features and thereby connects people to create a strong community and a rich source of books every day. Your presence is the driving force for us to grow more modern and stronger.
+              <h2 class="mb-4-1">Diễn Đàn Trao Đổi Và Giao Dịch Sách</h2>
+              <p class="small mb-0">Nhằm mang lại trải nghiệm thú vị và tiện ích nhất cho người dùng, đặc biệt là những người đam mê sách. Trang web mang đến sự tiện lợi và nhiều tính năng ưu việt, từ đó kết nối mọi người để tạo nên một cộng đồng vững mạnh và nguồn sách phong phú mỗi ngày. Sự hiện diện của bạn chính là động lực để chúng tôi ngày càng phát triển hiện đại và vững mạnh hơn.
               </p>
             </div>
 

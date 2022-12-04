@@ -67,8 +67,8 @@ export default function Register(){
                 <img src={logo} alt="logo" id='imgreg'onClick={()=>history.push('/')}/>
             </div>
             <h1 className="my-5 display-3 fw-bold ls-tight px-3" style={{color: 'hsl(218, 81%, 95%)','text-align':'center'}}>
-                Best Choose<br />
-            <span style={{color: 'hsl(218, 81%, 75%)'}}>for your wonderful experiences </span>
+                Lựa Chọn Tốt Nhất<br />
+            <span style={{color: 'hsl(218, 81%, 75%)'}}>cho sự trải nghiệm tuyệt vời của bạn </span>
             </h1>
 
         </MDBCol>
@@ -94,12 +94,12 @@ export default function Register(){
               <MDBInput wrapperClass='mb-4' label='Email' id='form3' type='email'onChange={onValueChange_Email}/>
               <MDBInput wrapperClass='mb-4' label='Password' id='form4' type='password'onChange={onValueChange_Password}/>
 
-              <MDBBtn className='w-100 mb-4' size='md' onClick={onCreate}>sign up</MDBBtn>
+              <MDBBtn className='w-100 mb-4' size='md' onClick={onCreate}>Đăng Ký</MDBBtn>
             </MDBCardBody>
             <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
-              <p className="mb-0">Have an account ?</p>
+              <p className="mb-0">Đã có tài khoản ?</p>
               <MDBBtn outline className='mx-2' color='danger' onClick={()=>history.push('/login')}>
-                Login now
+                Đăng nhập
               </MDBBtn>
             </div>
           </MDBCard>
