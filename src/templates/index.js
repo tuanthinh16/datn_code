@@ -132,6 +132,7 @@ export const Index = () => {
     } catch (error) {}
   };
   React.useEffect(() => {
+    document.title = "Home Page";
     getTotalBook();
     getAllBlock();
     getAllbook();

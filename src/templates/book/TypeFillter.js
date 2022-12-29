@@ -37,6 +37,7 @@ export const TypeFillter = () => {
     console.error("Invalid token: " + token);
   }
   React.useEffect(() => {
+    document.title = "Fillter by Type";
     const FillterType = async () => {
       try {
         const rs = await Fillter(value);

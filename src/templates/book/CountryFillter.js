@@ -23,6 +23,7 @@ export const CountryFillter = () => {
   });
 
   React.useEffect(() => {
+    document.title = "Fillter by Country";
     const FillterType = async () => {
       try {
         const rs = await Fillter(country);

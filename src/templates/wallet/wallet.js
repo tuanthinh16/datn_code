@@ -97,7 +97,7 @@ export const Wallet = () => {
   }
   React.useEffect(() => {
     getInfoUser();
-
+    document.title = "Wallet :"+username+"";
     getWorkUsr();
   }, []);
   return (

@@ -51,7 +51,7 @@ export const Menu = () => {
           </NavDropdown>
           <Nav.Link href="/book/add-book">{t("menu.create")}</Nav.Link>
           {/* <Nav.Link href="#">{t('menu.sell')}</Nav.Link> */}
-          <Nav.Link href="#">{t("menu.give")}</Nav.Link>
+          {/* <Nav.Link href="#">{t("menu.give")}</Nav.Link> */}
 
           {/* type */}
           <NavDropdown

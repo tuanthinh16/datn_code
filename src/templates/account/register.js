@@ -40,6 +40,9 @@ export default function Register(){
   const onValueChange_Email =(e)=>{
     setInfo(prev=>({...prev,email:e.target.value}))
   }
+  React.useEffect (()=>{
+    document.title = "Register";
+  },[]);
   const onCreate = async ()=>{
     const data = new FormData();
     data.append('fname',info.fullname);

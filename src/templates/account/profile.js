@@ -114,6 +114,7 @@ export default function Profile() {
     }
   };
   useEffect(() => {
+    document.title = "Profile - "+username+" ";
     const requestData = async () => {
       try {
         const result = await getWork(username);
@@ -311,7 +312,7 @@ export default function Profile() {
             <Tab
               eventKey="work"
               title="Hoạt Động"
-              style={{ height: 400, width: "100%" }}
+              style={{  width: "100%" }}
             >
               <TableContainer component={Paper}>
                 <Table

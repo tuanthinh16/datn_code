@@ -37,7 +37,9 @@ export default function Login(){
     setData(prev =>({...prev, password:event.target.value}));
   }
 
-
+  React.useEffect (()=>{
+    document.title = "Login";
+  },[]);
   
   // api login
   const onLogin = async ()=>{

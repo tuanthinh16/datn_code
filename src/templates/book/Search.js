@@ -37,6 +37,7 @@ const Search = () => {
   };
   React.useEffect(() => {
     onSearch();
+    document.title = "Search";
   }, []);
   return (
     <Wrapper>

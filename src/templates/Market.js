@@ -67,6 +67,7 @@ function Home() {
 
   const [infoBook, setInfoBook] = useState([]);
   useEffect(() => {
+    document.title = "Market"
     const getInfoBook = async () => {
       try {
         const rs = await getBookAPI();
